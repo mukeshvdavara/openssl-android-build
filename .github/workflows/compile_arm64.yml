@@ -9,7 +9,6 @@ env:
   OPENSSL_VERSION: 3.0.1
   ANDROID_NDK_VERSION: r25
   ANDROID_TARGET_API: 31
-  WORK_PATH: /home/runner/work/openssl
 
 jobs:
   compile_arm64:
@@ -43,10 +42,8 @@ jobs:
         id: compile
         if: steps.download_openssl.outputs.status == 'success' && !cancelled()
         run: |
-          pwd
-          export ANDROID_NDK_ROOT=${{github.workspace}}/android-ndk-${{env.ANDROID_NDK_VERSION}}-linux
+          echo "${{github.workspace}}/android-ndk-${{env.ANDROID_NDK_VERSION}}-linux" >> $ANDROID_NDK_ROOT
           cd openssl-${{env.OPENSSL_VERSION}}
-          pwd
           PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin:$PATH
-          ./Configure android-arm64 -D__ANDROID_API__=${{env.ANDROID_TARGET_API}} -static no-ssl3 no-comp no-engine no-shared no-tests --prefix=${{github.workspace}}
+          ./Configure android-arm64 -D__ANDROID_API__=${{env.ANDROID_TARGET_API}} -static no-ssl3 no-comp no-engine no-shared no-tests --prefix=${{github.workspace}}/output
           echo "::set-output name=status::success"
