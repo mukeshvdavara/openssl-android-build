@@ -43,5 +43,5 @@ jobs:
         if: steps.download_openssl.outputs.status == 'success' && !cancelled()
         run: |
           cd openssl-${{env.OPENSSL_VERSION}}
-          bash ./build_arm64.sh ${{github.workspace}}/android-ndk-${{env.ANDROID_NDK_VERSION}}-linux ${{env.ANDROID_TARGET_API}} ${{github.workspace}}/output
+          bash ${{github.workspace}}/build_arm64.sh ${{github.workspace}}/android-ndk-${{env.ANDROID_NDK_VERSION}}-linux ${{env.ANDROID_TARGET_API}} ${{github.workspace}}/output
           echo "::set-output name=status::success"
